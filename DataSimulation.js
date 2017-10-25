@@ -68,15 +68,38 @@ const firstVisit = () => {
   return firstVisitActions;
 };
 
+const lastHit = (visits) => {
+  const bookingChance = Math.random() * 100;
+  let booked = false;
+
+  if (visits <= 7) {
+    if (bookingChance <= 30) {
+      booked = true;
+    }
+  } else if ((visits >= 8) && (visits <= 12)) {
+    if ((bookingChance >= 31) && (bookingChance <= 55)) {
+      booked = true;
+    }
+  } else if ((visits >= 15) && (visits <= 20)) {
+    if ((bookingChance >= 57) && (bookingChance <= 85)) {
+      booked = true;
+    }
+  } else {
+    booked = true;
+  }
+
+  return booked;
+};
+
 const populateUserStream = () => {
   const userId = getRandomUserId();
   const visits = countUserVisits();
-  const maxBookings = getMaxBookings(visits);
+  let maxBookings = getMaxBookings(visits);
 
   tempUserStream[userId] = [];
 
   for (let v = 0; v < visits; v += 1) {
-    let hitsForVisit = getRandomNumOfHits();
+    const hitsForVisit = getRandomNumOfHits();
     let hitsDetailsForVisit = {};
     let hit = 1;
 
@@ -84,10 +107,23 @@ const populateUserStream = () => {
       if (v === 0 && hit === 1) {
         hitsDetailsForVisit = firstVisit();
         hit += 2;
+      } else if (hit === hitsForVisit) {
+        if (lastHit(visits) && maxBookings > 0) {
+          hitsDetailsForVisit[hit] = 'booked';
+          maxBookings -= 1;
+        } else {
+          hitsDetailsForVisit[hit] = 'view_listing_details';
+        }
+        tempUserStream[userId].push(hitsDetailsForVisit);
+        hit += 1;
       } else {
         hitsDetailsForVisit[hit] = 'view_listing_details';
+        hit += 1;
       }
     }
   }
+
+  return tempUserStream;
 };
 
+// console.log(populateUserStream()[1]);

@@ -45,6 +45,18 @@ const countUsersByVisits = () => {
 //  the next few functions are for determining number of bookings per user for number of visits
 const getChance = () => (Math.random() * 100).toFixed(2);
 
+const findNumBookingsForMaxTwo = (chance, chanceForMax, chanceForOne) => {
+  let bookings = 0;
+
+  if (chance < chanceForMax) {
+    bookings = 2;
+  } else if (chance < chanceForOne) {
+    bookings = 1;
+  }
+
+  return bookings;
+};
+
 const getBookingsForOne = () => {
   const chance = getChance();
   let bookings = 0;
@@ -52,7 +64,16 @@ const getBookingsForOne = () => {
   if (chance < 3) {
     bookings = 1;
   }
-  
+
+  return bookings;
+};
+
+const getBookingsForTwoToSeven = (visits) => {
+  const chance = getChance();
+  const chanceForMax = (visits / 10);
+  const chanceForOne = (21 - visits) * visits;
+  const bookings = findNumBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
+
   return bookings;
 };
 
@@ -61,49 +82,49 @@ const getBookingsForOne = () => {
 
 const tempUserStream = {}; // temporary object to hold user hits by userId
 
-const firstVisit = () => {
-  const firstVisitActions = {
-    1: 'search',
-    2: 'view_listing_details',
-  };
+// const firstVisit = () => {
+//   const firstVisitActions = {
+//     1: 'search',
+//     2: 'view_listing_details',
+//   };
 
-  return firstVisitActions;
-};
+//   return firstVisitActions;
+// };
 
 
-const populateUserStream = () => {
-  const userId = getRandomUserId();
-  const visits = countUsersByVisits();
-  let maxBookings = getMaxBookings(visits);
+// const populateUserStream = () => {
+//   const userId = getRandomUserId();
+//   const visits = countUsersByVisits();
+//   let maxBookings = getMaxBookings(visits);
 
-  tempUserStream[userId] = [];
+//   tempUserStream[userId] = [];
 
-  for (let v = 0; v < visits; v += 1) {
-    const hitsForVisit = getRandomNumOfHits();
-    let hitsDetailsForVisit = {};
-    let hit = 1;
+//   for (let v = 0; v < visits; v += 1) {
+//     const hitsForVisit = getRandomNumOfHits();
+//     let hitsDetailsForVisit = {};
+//     let hit = 1;
 
-    while (hit <= hitsForVisit) {
-      if (v === 0 && hit === 1) {
-        hitsDetailsForVisit = firstVisit();
-        hit += 2;
-      } else if (hit === hitsForVisit) {
-        if (lastHit(visits) && maxBookings > 0) {
-          hitsDetailsForVisit[hit] = 'booked';
-          maxBookings -= 1;
-        } else {
-          hitsDetailsForVisit[hit] = 'view_listing_details';
-        }
-        tempUserStream[userId].push(hitsDetailsForVisit);
-        hit += 1;
-      } else {
-        hitsDetailsForVisit[hit] = 'view_listing_details';
-        hit += 1;
-      }
-    }
-  }
+//     while (hit <= hitsForVisit) {
+//       if (v === 0 && hit === 1) {
+//         hitsDetailsForVisit = firstVisit();
+//         hit += 2;
+//       } else if (hit === hitsForVisit) {
+//         if (lastHit(visits) && maxBookings > 0) {
+//           hitsDetailsForVisit[hit] = 'booked';
+//           maxBookings -= 1;
+//         } else {
+//           hitsDetailsForVisit[hit] = 'view_listing_details';
+//         }
+//         tempUserStream[userId].push(hitsDetailsForVisit);
+//         hit += 1;
+//       } else {
+//         hitsDetailsForVisit[hit] = 'view_listing_details';
+//         hit += 1;
+//       }
+//     }
+//   }
 
-  return tempUserStream;
-};
+//   return tempUserStream;
+// };
 
 // console.log(populateUserStream()[1]);

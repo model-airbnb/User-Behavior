@@ -4,7 +4,7 @@
   "description": "User Behavior Service",
   "main": "server/index.js",
   "scripts": {
-    "server-dev": "nodemon --inspect server/index.js",
+    "server-dev": "nodemon --inspect server/index.js"
   },
   "repository": {
     "type": "git",

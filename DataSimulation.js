@@ -25,7 +25,7 @@ const getRandomNumOfHits = () => (
   Math.ceil(Math.random() * HITS_RANGE)
 );
 
-const countUsersByVisits = () => {
+const getVisitsAndCountUser = () => {
   const visits = getRandomNumOfVisits();
 
   if ((visits >= 1) && (visits <= 7) && (USER_VISITS_COUNT[1] < 30000)) {
@@ -48,7 +48,7 @@ const countUsersByVisits = () => {
 //  the next few functions are for determining number of bookings per user for number of visits
 const getChance = () => (Math.random() * 100).toFixed(2);
 
-const findNumBookingsForMaxTwo = (chance, chanceForMax, chanceForOne) => {
+const getBookingsForMaxTwo = (chance, chanceForMax, chanceForOne) => {
   let bookings = 0;
 
   if (chance < chanceForMax) {
@@ -60,7 +60,7 @@ const findNumBookingsForMaxTwo = (chance, chanceForMax, chanceForOne) => {
   return bookings;
 };
 
-const getBookingsForOne = () => {
+const getBookingsOneVisit = () => {
   const chance = getChance();
   let bookings = 0;
 
@@ -71,16 +71,16 @@ const getBookingsForOne = () => {
   return bookings;
 };
 
-const getBookingsForTwoToSeven = (visits) => {
+const getBookingsTwoToSevenVisits = (visits) => {
   const chance = getChance();
   const chanceForOne = (21 - visits) * visits;
   const chanceForMax = (visits / 10);
-  const bookings = findNumBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
+  const bookings = getBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
 
   return bookings;
 };
 
-const getBookingsForEightToThirteen = (visits) => {
+const getBookingsEightToThirteenVisits = (visits) => {
   const chance = getChance();
   const increment = visits - 7;
   let i = 1;
@@ -94,12 +94,12 @@ const getBookingsForEightToThirteen = (visits) => {
   }
 
   const chanceForMax = numerator / denominator;
-  const bookings = findNumBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
+  const bookings = getBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
 
   return bookings;
 };
 
-const getBookingsForFourteenToNineteen = (visits) => {
+const getBookingsFourteenToNineteenVisits = (visits) => {
   const chance = getChance();
   const increment = visits - 13;
   let i = 1;
@@ -114,12 +114,12 @@ const getBookingsForFourteenToNineteen = (visits) => {
   }
 
   const chanceForMax = numerator / denominator;
-  const bookings = findNumBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
+  const bookings = getBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
 
   return bookings;
 };
 
-const getBookingsForTwentyToTwentyFive = (visits) => {
+const getBookingsTwentyToTwentyFiveVisits = (visits) => {
   const chance = getChance();
   let chanceForOne = 96.85;
   const increment = visits - 19;
@@ -144,15 +144,15 @@ const getBookingsForTwentyToTwentyFive = (visits) => {
   return bookings;
 };
 
-const getBookingsForTwentySixPlus = (visits) => {
+const getBookingsTwentySixPlusVisits = (visits) => {
   const chance = getChance();
-  let chanceForOne = 96.60;
+  const chanceForOne = 96.60;
   const increment = visits - 25;
   const chanceForTwo = 3;
   const chanceForThree = ((30 + increment) / 100);
   const chanceForMax = 0.05;
   let bookings = 0;
- 
+
   if (chance < chanceForMax) {
     bookings = 4;
   } else if (chance < chanceForThree) {
@@ -166,26 +166,46 @@ const getBookingsForTwentySixPlus = (visits) => {
   return bookings;
 };
 
+const getNumOfBookings
+
 /* ----- END HELPER FUNCTIONS ----- */
 
 const tempUserStream = {}; // temporary object to hold user hits by userId
 
-// const firstVisit = () => {
-//   const firstVisitActions = {
-//     1: 'search',
-//     2: 'view_listing_details',
-//   };
+const firstVisit = () => {
+  const firstVisitActions = {
+    1: 'search',
+    2: 'view_listing_details',
+  };
 
-//   return firstVisitActions;
-// };
+  return firstVisitActions;
+};
 
+//  eventually I will add a condition for users to generate more search actions
 
-// const populateUserStream = () => {
-//   const userId = getRandomUserId();
-//   const visits = countUsersByVisits();
-//   let maxBookings = getMaxBookings(visits);
+const populateUserStream = () => {
+  const userId = getRandomUserId();
+  const visits = getVisitsAndCountUser();
+  const bookings = 
 
-//   tempUserStream[userId] = [];
+  tempUserStream[userId] = [];
+
+  for (let v = 0; v < visits; v += 1) {
+    const hitsForVisit = getRandomNumOfHits();
+    let hitsDetailsForVisit = {};
+    let hit = 1;
+
+    while (hit <= hitsForVisit) {
+      if (v === 0 && hit === 1) { //  if first visit and first hit
+        hitsDetailsForVisit = firstVisit();
+        hit += 2;
+      } else if (hit === hitsForVisit) { //  if last hit for visit
+
+      }
+    }
+  }
+
+};
 
 //   for (let v = 0; v < visits; v += 1) {
 //     const hitsForVisit = getRandomNumOfHits();

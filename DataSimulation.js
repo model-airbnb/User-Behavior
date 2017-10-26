@@ -4,9 +4,10 @@ const HITS_RANGE = 25;
 
 const USER_VISITS_COUNT = {
   1: 0, //  1-7, max 30000
-  2: 0, //  8-12, max 50000
-  3: 0, //  13-20, max 15000
-  4: 0, //  20+ max 5000
+  2: 0, //  8-13, max 50000
+  3: 0, //  14-19, max 15000
+  4: 0, //  20-25 max 3000
+  5: 0, // 25+ max 2000
 };
 
 // Get a random user id so that visit values are spread randomly
@@ -29,12 +30,14 @@ const countUsersByVisits = () => {
 
   if ((visits >= 1) && (visits <= 7) && (USER_VISITS_COUNT[1] < 30000)) {
     USER_VISITS_COUNT[1] += 1;
-  } else if ((visits >= 8) && (visits <= 12) && (USER_VISITS_COUNT[2] < 50000)) {
+  } else if ((visits >= 8) && (visits <= 13) && (USER_VISITS_COUNT[2] < 50000)) {
     USER_VISITS_COUNT[2] += 1;
-  } else if ((visits >= 13) && (visits <= 20) && (USER_VISITS_COUNT[3] < 15000)) {
+  } else if ((visits >= 14) && (visits <= 19) && (USER_VISITS_COUNT[3] < 15000)) {
     USER_VISITS_COUNT[3] += 1;
-  } else if ((visits >= 21) && (USER_VISITS_COUNT[4] < 5000)) {
+  } else if ((visits >= 20) && (visits <= 25) && (USER_VISITS_COUNT[4] < 3000)) {
     USER_VISITS_COUNT[4] += 1;
+  } else if ((visits >= 26) && (USER_VISITS_COUNT[5] < 2000)) {
+    USER_VISITS_COUNT[5] += 1;
   } else {
     countUsersByVisits();
   }
@@ -95,6 +98,16 @@ const getBookingsForEightToThirteen = (visits) => {
 
   return bookings;
 };
+
+const getBookingsForFourteenToNineteen = (visits) => {
+  const chance = getChance();
+
+  const chanceForMax = numerator / denominator;
+  const chanceForOne = 98;
+  const bookings = findNumBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
+
+  return bookings;
+}
 
 /* ----- END HELPER FUNCTIONS ----- */
 

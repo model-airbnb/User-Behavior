@@ -1,5 +1,7 @@
-let userVisit = [];
+const chance = Math.ceil(Math.random() * 100);
 
-let i = 0;
+console.log(chance);
 
-console.log(20 * 0.20);
+const incrementIdFrom = (id) => (
+  id += 1
+)

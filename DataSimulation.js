@@ -23,7 +23,7 @@ const getRandomNumOfHits = () => (
   Math.ceil(Math.random() * HITS_RANGE)
 );
 
-const countUserVisits = () => {
+const countUsersByVisits = () => {
   const visits = getRandomNumOfVisits();
 
   if ((visits >= 1) && (visits <= 7) && (USER_VISITS_COUNT[1] < 30000)) {
@@ -35,7 +35,7 @@ const countUserVisits = () => {
   } else if ((visits >= 21) && (USER_VISITS_COUNT[4] < 5000)) {
     USER_VISITS_COUNT[4] += 1;
   } else {
-    countUserVisits();
+    countUsersByVisits();
   }
 
   return visits;
@@ -44,14 +44,14 @@ const countUserVisits = () => {
 const getMaxBookings = (visits) => {
   let maxBookings = 0;
 
-  if (visits <= 7) {
-    maxBookings = (Math.round(visits * 0.3));
-  } else if ((visits >= 8) && (visits <= 12)) {
-    maxBookings = (Math.round(visits * 0.25));
-  } else if ((visits >= 13) && (visits <= 20)) {
-    maxBookings = (Math.round(visits * 0.20));
+  if (visits === 1) {
+    maxBookings = 1;
+  } else if ((visits >= 2) && (visits <= 19)) {
+    maxBookings = 2;
+  } else if ((visits >= 20) && (visits <= 25)) {
+    maxBookings = 3;
   } else {
-    maxBookings = (Math.round(visits * 0.15));
+    maxBookings = 4;
   }
 
   return maxBookings;
@@ -68,8 +68,8 @@ const firstVisit = () => {
   return firstVisitActions;
 };
 
-const lastHit = (visits) => {
-  const bookingChance = Math.random() * 100;
+const actionOnLastHit = (visits) => {
+  const bookingChance = Math.ceil(Math.random() * 100);
   let booked = false;
 
   if (visits <= 7) {
@@ -93,7 +93,7 @@ const lastHit = (visits) => {
 
 const populateUserStream = () => {
   const userId = getRandomUserId();
-  const visits = countUserVisits();
+  const visits = countUsersByVisits();
   let maxBookings = getMaxBookings(visits);
 
   tempUserStream[userId] = [];

@@ -15,7 +15,7 @@ const getRandomUserId = () => (
   Math.ceil(Math.random() * USER_ID_RANGE)
 );
 
-//  Get a random number of visits for a particular user within a 3 month period
+//  Get a random number of visits for a particular user
 const getRandomNumOfVisits = () => (
   Math.ceil(Math.random() * VISITS_RANGE)
 );
@@ -39,7 +39,7 @@ const getVisitsAndCountUser = () => {
   } else if ((visits >= 26) && (USER_VISITS_COUNT[5] < 2000)) {
     USER_VISITS_COUNT[5] += 1;
   } else {
-    countUsersByVisits();
+    getVisitsAndCountUser();
   }
 
   return visits;
@@ -186,10 +186,6 @@ const getNumOfBookingsForUser = (visits) => {
   return bookings;
 };
 
-/* ----- END HELPER FUNCTIONS ----- */
-
-const tempUserStream = {}; // temporary object to hold user hits by userId
-
 const firstVisit = () => {
   const firstVisitActions = {
     1: 'search',
@@ -198,6 +194,24 @@ const firstVisit = () => {
 
   return firstVisitActions;
 };
+
+const getVisitsThatBooked = (bookings, visits) => {
+  const result = [];
+
+  while (result.length < bookings) {
+    const v = Math.ceil(Math.random() * visits);
+    if (!result.includes(v)) {
+      result.push(v);
+    }
+  }
+
+  return result;
+};
+
+/* ----- END HELPER FUNCTIONS ----- */
+
+const tempUserStream = {}; // temporary object to hold user hits by userId
+
 
 //  eventually I will add a condition for users to generate more search actions
 

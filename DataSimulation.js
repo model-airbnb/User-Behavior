@@ -166,7 +166,25 @@ const getBookingsTwentySixPlusVisits = (visits) => {
   return bookings;
 };
 
-const getNumOfBookings
+const getNumOfBookingsForUser = (visits) => {
+  let bookings;
+
+  if (visits === 1) {
+    bookings = getBookingsOneVisit();
+  } else if (visits <= 7) {
+    bookings = getBookingsTwoToSevenVisits();
+  } else if (visits <= 13) {
+    bookings = getBookingsEightToThirteenVisits();
+  } else if (visits <= 19) {
+    bookings = getBookingsFourteenToNineteenVisits();
+  } else if (visits <= 25) {
+    bookings = getBookingsTwentyToTwentyFiveVisits();
+  } else {
+    bookings = getBookingsTwentySixPlusVisits;
+  }
+
+  return bookings;
+};
 
 /* ----- END HELPER FUNCTIONS ----- */
 
@@ -186,7 +204,7 @@ const firstVisit = () => {
 const populateUserStream = () => {
   const userId = getRandomUserId();
   const visits = getVisitsAndCountUser();
-  const bookings = 
+  const bookings = getNumOfBookingsForUser();
 
   tempUserStream[userId] = [];
 

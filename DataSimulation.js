@@ -77,6 +77,24 @@ const getBookingsForTwoToSeven = (visits) => {
   return bookings;
 };
 
+const getBookingsForEightToThirteen = (visits) => {
+  const chance = getChance();
+  const increment = visits - 7;
+  let i = 0;
+  let numerator = 6;
+  const denominator = 10;
+
+  while (i < increment) {
+    numerator += 2;
+    i += 1;
+  }
+
+  const chanceForMax = numerator / denominator;
+  const chanceForOne = 98;
+  const bookings = findNumBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
+
+  return bookings;
+};
 
 /* ----- END HELPER FUNCTIONS ----- */
 

@@ -2,13 +2,12 @@ const USER_ID_RANGE = 100000;
 const VISITS_RANGE = 30;
 const HITS_RANGE = 25;
 
-const USER_VISITS_COUNT = {
-  1: 0, //  1-7, max 30000
-  2: 0, //  8-13, max 50000
-  3: 0, //  14-19, max 15000
-  4: 0, //  20-25 max 3000
-  5: 0, // 26+ max 2000
-};
+const USER_VISITS_COUNT = [0, 0, 0, 0, 0];
+// idx = 0, max 30000
+// idx = 1, max 50000
+// idx = 2, max 15000
+// idx = 3, max 3000
+// idx = 4, max 2000
 
 // Get a random user id so that visit values are spread randomly
 const getRandomUserId = () => (
@@ -25,19 +24,20 @@ const getRandomNumOfHits = () => (
   Math.ceil(Math.random() * HITS_RANGE)
 );
 
+//  Eventually: refactor
 const getVisitsAndCountUser = () => {
   const visits = getRandomNumOfVisits();
 
-  if ((visits >= 1) && (visits <= 7) && (USER_VISITS_COUNT[1] < 30000)) {
+  if ((visits >= 1) && (visits <= 7) && (USER_VISITS_COUNT[0] < 30000)) {
+    USER_VISITS_COUNT[0] += 1;
+  } else if ((visits >= 8) && (visits <= 13) && (USER_VISITS_COUNT[1] < 50000)) {
     USER_VISITS_COUNT[1] += 1;
-  } else if ((visits >= 8) && (visits <= 13) && (USER_VISITS_COUNT[2] < 50000)) {
+  } else if ((visits >= 14) && (visits <= 19) && (USER_VISITS_COUNT[2] < 15000)) {
     USER_VISITS_COUNT[2] += 1;
-  } else if ((visits >= 14) && (visits <= 19) && (USER_VISITS_COUNT[3] < 15000)) {
+  } else if ((visits >= 20) && (visits <= 25) && (USER_VISITS_COUNT[3] < 3000)) {
     USER_VISITS_COUNT[3] += 1;
-  } else if ((visits >= 20) && (visits <= 25) && (USER_VISITS_COUNT[4] < 3000)) {
+  } else if ((visits >= 26) && (USER_VISITS_COUNT[4] < 2000)) {
     USER_VISITS_COUNT[4] += 1;
-  } else if ((visits >= 26) && (USER_VISITS_COUNT[5] < 2000)) {
-    USER_VISITS_COUNT[5] += 1;
   } else {
     getVisitsAndCountUser();
   }
@@ -186,13 +186,9 @@ const getNumOfBookingsForUser = (visits) => {
   return bookings;
 };
 
-const firstVisit = () => {
-  const firstVisitActions = {
-    1: 'search',
-    2: 'view_listing_details',
-  };
-
-  return firstVisitActions;
+const firstVisitActions = {
+  1: 'search',
+  2: 'view_listing_details',
 };
 
 //  randomly determine which user visits ended in a booking action
@@ -235,7 +231,7 @@ const populateUserStream = () => {
 
     while (hit <= hitsForVisit) {
       if (v === 0 && hit === 1) { //  if first visit and first hit
-        hitsDetailsForVisit = firstVisit();
+        hitsDetailsForVisit = firstVisitActions;
         hit += 2;
       }
 

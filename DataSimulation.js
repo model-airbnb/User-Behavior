@@ -7,7 +7,7 @@ const USER_VISITS_COUNT = {
   2: 0, //  8-13, max 50000
   3: 0, //  14-19, max 15000
   4: 0, //  20-25 max 3000
-  5: 0, // 25+ max 2000
+  5: 0, // 26+ max 2000
 };
 
 // Get a random user id so that visit values are spread randomly
@@ -144,8 +144,26 @@ const getBookingsForTwentyToTwentyFive = (visits) => {
   return bookings;
 };
 
-const getBookingsForTwentyFivePlus = (visits) => {
+const getBookingsForTwentySixPlus = (visits) => {
+  const chance = getChance();
+  let chanceForOne = 96.60;
+  const increment = visits - 25;
+  const chanceForTwo = 3;
+  const chanceForThree = ((30 + increment) / 100);
+  const chanceForMax = 0.05;
+  let bookings = 0;
+ 
+  if (chance < chanceForMax) {
+    bookings = 4;
+  } else if (chance < chanceForThree) {
+    bookings = 3;
+  } else if (chance < chanceForTwo) {
+    bookings = 2;
+  } else if (chance < chanceForOne) {
+    bookings = 1;
+  }
 
+  return bookings;
 };
 
 /* ----- END HELPER FUNCTIONS ----- */

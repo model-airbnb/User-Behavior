@@ -73,8 +73,8 @@ const getBookingsForOne = () => {
 
 const getBookingsForTwoToSeven = (visits) => {
   const chance = getChance();
-  const chanceForMax = (visits / 10);
   const chanceForOne = (21 - visits) * visits;
+  const chanceForMax = (visits / 10);
   const bookings = findNumBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
 
   return bookings;
@@ -82,11 +82,11 @@ const getBookingsForTwoToSeven = (visits) => {
 
 const getBookingsForEightToThirteen = (visits) => {
   const chance = getChance();
-  const chanceForOne = 98;
   const increment = visits - 7;
   let i = 1;
   let numerator = 8;
   const denominator = 10;
+  const chanceForOne = 98;
 
   while (i < increment) {
     numerator += 2;
@@ -101,11 +101,11 @@ const getBookingsForEightToThirteen = (visits) => {
 
 const getBookingsForFourteenToNineteen = (visits) => {
   const chance = getChance();
-  let chanceForOne = 97.90;
   const increment = visits - 13;
   let i = 1;
   let numerator = 20;
   const denominator = 10;
+  let chanceForOne = 97.90;
 
   while (i < increment) {
     chanceForOne = (chanceForOne - 0.09).toFixed(2);
@@ -117,6 +117,35 @@ const getBookingsForFourteenToNineteen = (visits) => {
   const bookings = findNumBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
 
   return bookings;
+};
+
+const getBookingsForTwentyToTwentyFive = (visits) => {
+  const chance = getChance();
+  let chanceForOne = 96.85;
+  const increment = visits - 19;
+  let i = 1;
+  const chanceForTwo = ((29 + increment) / 10);
+  const chanceForMax = 0.11;
+  let bookings = 0;
+
+  while (i < increment) {
+    chanceForOne = (chanceForOne - 0.1).toFixed(2);
+    i += 1;
+  }
+
+  if (chance < chanceForMax) {
+    bookings = 3;
+  } else if (chance < chanceForTwo) {
+    bookings = 2;
+  } else if (chance < chanceForOne) {
+    bookings = 1;
+  }
+
+  return bookings;
+};
+
+const getBookingsForTwentyFivePlus = (visits) => {
+
 };
 
 /* ----- END HELPER FUNCTIONS ----- */

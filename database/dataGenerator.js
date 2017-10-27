@@ -209,7 +209,25 @@ const getNumNightsBooked = () => {
   const chance = getChance();
   let nights = 0;
 
+  if (chance < 16) {
+    nights = 1;
+  } else if (chance < 46) {
+    nights = 2;
+  } else if (chance < 73) {
+    nights = 3;
+  } else if (chance < 85) {
+    nights = 4;
+  } else if (chance < 92) {
+    nights = 5;
+  } else if (chance < 96) {
+    nights = 6;
+  } else if (chance < 99) {
+    nights = 7;
+  } else {
+    nights = 8;
+  }
 
+  return nights;
 
 }
 

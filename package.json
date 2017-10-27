@@ -16,7 +16,8 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "nodemon": "^1.12.1",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "psql": "0.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

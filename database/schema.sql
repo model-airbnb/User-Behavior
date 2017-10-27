@@ -1,19 +1,26 @@
-
-
 CREATE TABLE user_hits (
-  id            SERIAL UNIQUE NOT NULL PRIMARY KEY,
-  user_id       INT NOT NULL,
-  visit_id      SERIAL UNIQUE NOT NULL,
-  action_id     SERIAL UNIQUE NOT NULL,
-  search_id     INT,
-  booking_id    SERIAL UNIQUE,
-  hit_time      TIME NOT NULL,
-  hit_date      DATE NOT NULL
+  hit_id                SERIAL UNIQUE NOT NULL PRIMARY KEY,
+  user_id               INT NOT NULL,
+  visit_id              SERIAL UNIQUE NOT NULL,
+  action_id             SERIAL UNIQUE NOT NULL REFERENCES actions(action_id),
+  search_id             INT,
+  listing_id            INT,
+  booking_id            SERIAL UNIQUE REFERENCES bookings(booking_id),
+  hit_time              TIME NOT NULL,
+  hit_date              DATE NOT NULL
+);
 
-)
+CREATE TABLE actions (
+  action_id             SERIAL UNIQUE NOT NULL PRIMARY KEY,
+  user_action           VARCHAR(50)
+);
 
-1) create DB schema
-2) think about queries to insert
-3) how to make node server execute queries (using psql)
-4) how to create functions to execute queries from (3)
-5) where should those functions (from 4) live?
+CREATE TABLE bookings (
+  booking_id            SERIAL UNIQUE NOT NULL PRIMARY KEY,
+  listing_id            INT NOT NULL,
+  date_booked           DATE NOT NULL,
+  check_in              DATE NOT NULL,
+  check_out             DATE NOT NULL,
+  total_price           MONEY NOT NULL,
+  avg_price_per_night   MONEY NOT NULL
+);

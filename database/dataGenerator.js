@@ -86,7 +86,6 @@ const getBookingsEightToThirteenVisits = (visits) => {
   let i = 1;
   let numerator = 8;
   const denominator = 10;
-  const chanceForOne = 98;
 
   while (i < increment) {
     numerator += 2;
@@ -94,6 +93,7 @@ const getBookingsEightToThirteenVisits = (visits) => {
   }
 
   const chanceForMax = numerator / denominator;
+  const chanceForOne = 98 + chanceForMax;
   const bookings = getBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
 
   return bookings;
@@ -105,7 +105,6 @@ const getBookingsFourteenToNineteenVisits = (visits) => {
   let i = 1;
   let numerator = 20;
   const denominator = 10;
-  let chanceForOne = 97.90;
 
   while (i < increment) {
     chanceForOne = (chanceForOne - 0.09).toFixed(2);
@@ -114,6 +113,7 @@ const getBookingsFourteenToNineteenVisits = (visits) => {
   }
 
   const chanceForMax = numerator / denominator;
+  let chanceForOne = 97.90 + chanceForMax;
   const bookings = getBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
 
   return bookings;
@@ -121,11 +121,11 @@ const getBookingsFourteenToNineteenVisits = (visits) => {
 
 const getBookingsTwentyToTwentyFiveVisits = (visits) => {
   const chance = getChance();
-  let chanceForOne = 96.85;
   const increment = visits - 19;
   let i = 1;
-  const chanceForTwo = ((29 + increment) / 10);
   const chanceForMax = 0.11;
+  const chanceForTwo = ((29 + increment) / 10) + chanceForMax;
+  let chanceForOne = 96.85 + chanceForTwo;
   let bookings = 0;
 
   while (i < increment) {
@@ -146,11 +146,11 @@ const getBookingsTwentyToTwentyFiveVisits = (visits) => {
 
 const getBookingsTwentySixPlusVisits = (visits) => {
   const chance = getChance();
-  const chanceForOne = 96.60;
   const increment = visits - 25;
-  const chanceForTwo = 3;
-  const chanceForThree = ((30 + increment) / 100);
   const chanceForMax = 0.05;
+  const chanceForThree = ((30 + increment) / 100) + chanceForMax;
+  const chanceForTwo = 3 + chanceForThree;
+  const chanceForOne = 96.60 + chanceForTwo;
   let bookings = 0;
 
   if (chance < chanceForMax) {

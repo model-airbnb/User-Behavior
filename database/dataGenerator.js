@@ -73,8 +73,8 @@ const getBookingsOneVisit = () => {
 
 const getBookingsTwoToSevenVisits = (visits) => {
   const chance = getChance();
-  const chanceForOne = (21 - visits) * visits;
   const chanceForMax = (visits / 10);
+  const chanceForOne = ((21 - visits) * visits) + chanceForMax;
   const bookings = getBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
 
   return bookings;
@@ -205,6 +205,14 @@ const getVisitsThatBooked = (bookings, visits) => {
   return result;
 };
 
+const getNumNightsBooked = () => {
+  const chance = getChance();
+  let nights = 0;
+
+
+
+}
+
 const formatDate = (year, month, day) => {
   const mo = (`0${month}`).slice(-2);
   const d = (`0${day}`).slice(-2);
@@ -219,6 +227,7 @@ const formatTime = (hour, minutes, seconds) => {
 
   return `${hr}:${min}:${sec}`;
 };
+
 
 /* ----- END HELPER FUNCTIONS ----- */
 

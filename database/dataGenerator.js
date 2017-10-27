@@ -205,6 +205,21 @@ const getVisitsThatBooked = (bookings, visits) => {
   return result;
 };
 
+const formatDate = (year, month, day) => {
+  const mo = (`0${month}`).slice(-2);
+  const d = (`0${day}`).slice(-2);
+
+  return `${year}:${mo}:${d}`;
+};
+
+const formatTime = (hour, minutes, seconds) => {
+  const hr = (`0${hour}`).slice(-2);
+  const min = (`0${minutes}`).slice(-2);
+  const sec = (`0${seconds}`).slice(-2);
+
+  return `${hr}:${min}:${sec}`;
+};
+
 /* ----- END HELPER FUNCTIONS ----- */
 
 const tempUserStream = {}; // temporary object to hold user hits by userId

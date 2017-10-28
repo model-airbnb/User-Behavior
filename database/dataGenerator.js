@@ -1,6 +1,7 @@
 const USER_ID_RANGE = 100000;
 const VISITS_RANGE = 30;
 const HITS_RANGE = 25;
+const CURRENT_MONTH = '10';
 
 const USER_VISITS_COUNT = [0, 0, 0, 0, 0];
 // idx = 0, max 30000
@@ -228,8 +229,16 @@ const getNumNightsBooked = () => {
   }
 
   return nights;
+};
 
-}
+// the following functions are placeholders until data is integrated with other services
+const getRandomListingId = () => {
+  return Math.floor(Math.random() * (30000000 - 950 + 1)) + 950;
+};
+
+const getRandomSearchId = () => {
+  return Math.floor(Math.random() * (400000 - 1000 + 1)) + 1000;
+};
 
 const formatDate = (year, month, day) => {
   const mo = (`0${month}`).slice(-2);
@@ -238,29 +247,19 @@ const formatDate = (year, month, day) => {
   return `${year}:${mo}:${d}`;
 };
 
-const formatTime = (hour, minutes, seconds) => {
-  const hr = (`0${hour}`).slice(-2);
-  const min = (`0${minutes}`).slice(-2);
-  const sec = (`0${seconds}`).slice(-2);
-
-  return `${hr}:${min}:${sec}`;
-};
-
-
 /* ----- END HELPER FUNCTIONS ----- */
 
-const tempUserStream = {}; // temporary object to hold user hits by userId
-
+const tempUserHits = {}; // temporary object to hold user hits by userId
 
 //  eventually I will add a condition for users to generate more search actions
 
-const populateUserStream = () => {
+const populateUserHits = () => {
   const userId = getRandomUserId();
   const visits = getVisitsAndCountUser();
   const bookings = getNumOfBookingsForUser();
   const visitsThatBooked = getVisitsThatBooked(bookings, visits);
 
-  tempUserStream[userId] = [];
+  tempUserHits[userId] = [];
 
   for (let v = 1; v <= visits; v += 1) {
     let hitsForVisit = getRandomNumOfHits();
@@ -284,7 +283,7 @@ const populateUserStream = () => {
           hitsDetailsForVisit[hit] = 'view_listing_details'; //  last hit is a view
         }
 
-        tempUserStream[userId].push(hitsDetailsForVisit); //  end of current visit, push into array
+        tempUserHits[userId].push(hitsDetailsForVisit); //  end of current visit, push into array
         hit += 1;
       } else {
         hitsDetailsForVisit[hit] = 'view_listing_details';
@@ -293,5 +292,15 @@ const populateUserStream = () => {
     }
   }
 
-  return tempUserStream;
+  return tempUserHits;
+};
+
+const getRandomBookedDates = () => {
+  const numNights = getNumNightsBooked();
+  const startDay = (Math.ceil(Math.random() * 23)).toString();
+  const checkIn = formatDate('2017', CURRENT_MONTH, startDay);
+  const endDay = (parseInt(startDay, 10) + numNights).toString();
+  const checkOut = formatDate('2017', CURRENT_MONTH, endDay);
+
+  return [checkIn, checkOut];
 };

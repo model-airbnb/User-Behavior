@@ -238,7 +238,7 @@ const getRandomListingId = () => {
 
 const getRandomSearchId = () => {
   return Math.floor(Math.random() * (400000 - 1000 + 1)) + 1000;
-}
+};
 
 const formatDate = (year, month, day) => {
   const mo = (`0${month}`).slice(-2);
@@ -247,16 +247,9 @@ const formatDate = (year, month, day) => {
   return `${year}:${mo}:${d}`;
 };
 
-const getRandomCheckInDate = () => {
-  const day = (Math.ceil(Math.random() * 31)).toString();
-
-  return formatDate('2017', CURRENT_MONTH, day)
-};
-
 /* ----- END HELPER FUNCTIONS ----- */
 
 const tempUserHits = {}; // temporary object to hold user hits by userId
-
 
 //  eventually I will add a condition for users to generate more search actions
 
@@ -302,6 +295,12 @@ const populateUserHits = () => {
   return tempUserHits;
 };
 
-const populateBookings = () => {
+const getRandomBookedDates = () => {
+  const numNights = getNumNightsBooked();
+  const startDay = (Math.ceil(Math.random() * 23)).toString();
+  const checkIn = formatDate('2017', CURRENT_MONTH, startDay);
+  const endDay = (parseInt(startDay, 10) + numNights).toString();
+  const checkOut = formatDate('2017', CURRENT_MONTH, endDay);
 
-}
+  return [checkIn, checkOut];
+};

@@ -5,7 +5,7 @@ CREATE TABLE user_hits (
   action_type           VARCHAR(50),
   search_id             VARCHAR(50),
   listing_id            INT,
-  booking_id            SERIAL UNIQUE REFERENCES bookings(booking_id)
+  booking_id            INT UNIQUE REFERENCES bookings(booking_id)
 );
 
 CREATE TABLE bookings (

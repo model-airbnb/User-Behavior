@@ -1,6 +1,7 @@
 const USER_ID_RANGE = 100000;
 const VISITS_RANGE = 30;
 const HITS_RANGE = 25;
+const CURRENT_MONTH = '10';
 
 const USER_VISITS_COUNT = [0, 0, 0, 0, 0];
 // idx = 0, max 30000
@@ -230,6 +231,28 @@ const getNumNightsBooked = () => {
   return nights;
 };
 
+// the following functions are placeholders until data is integrated with other services
+const getRandomListingId = () => {
+  return Math.floor(Math.random() * (30000000 - 950 + 1)) + 950;
+};
+
+const getRandomSearchId = () => {
+  return Math.floor(Math.random() * (400000 - 1000 + 1)) + 1000;
+}
+
+const formatDate = (year, month, day) => {
+  const mo = (`0${month}`).slice(-2);
+  const d = (`0${day}`).slice(-2);
+
+  return `${year}:${mo}:${d}`;
+};
+
+const getRandomCheckInDate = () => {
+  const day = (Math.ceil(Math.random() * 31)).toString();
+
+  return formatDate('2017', CURRENT_MONTH, day)
+};
+
 /* ----- END HELPER FUNCTIONS ----- */
 
 const tempUserHits = {}; // temporary object to hold user hits by userId
@@ -278,3 +301,7 @@ const populateUserHits = () => {
 
   return tempUserHits;
 };
+
+const populateBookings = () => {
+
+}

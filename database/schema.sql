@@ -5,9 +5,7 @@ CREATE TABLE user_hits (
   action_id             SERIAL UNIQUE NOT NULL REFERENCES actions(action_id),
   search_id             INT,
   listing_id            INT,
-  booking_id            SERIAL UNIQUE REFERENCES bookings(booking_id),
-  hit_time              TIME NOT NULL,
-  hit_date              DATE NOT NULL
+  booking_id            SERIAL UNIQUE REFERENCES bookings(booking_id)
 );
 
 CREATE TABLE actions (
@@ -18,7 +16,6 @@ CREATE TABLE actions (
 CREATE TABLE bookings (
   booking_id            SERIAL UNIQUE NOT NULL PRIMARY KEY,
   listing_id            INT NOT NULL,
-  date_booked           DATE NOT NULL,
   check_in              DATE NOT NULL,
   check_out             DATE NOT NULL,
   total_price           MONEY NOT NULL,

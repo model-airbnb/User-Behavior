@@ -1,3 +1,5 @@
+const { addBooking } = require('./index');
+
 const USER_ID_RANGE = 100000;
 const VISITS_RANGE = 30;
 const HITS_RANGE = 25;
@@ -106,6 +108,7 @@ const getBookingsFourteenToNineteenVisits = (visits) => {
   let i = 1;
   let numerator = 20;
   const denominator = 10;
+  let chanceForOne = 97.90;
 
   while (i < increment) {
     chanceForOne = (chanceForOne - 0.09).toFixed(2);
@@ -114,7 +117,7 @@ const getBookingsFourteenToNineteenVisits = (visits) => {
   }
 
   const chanceForMax = numerator / denominator;
-  let chanceForOne = 97.90 + chanceForMax;
+  chanceForOne += chanceForMax;
   const bookings = getBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
 
   return bookings;
@@ -232,19 +235,36 @@ const getNumNightsBooked = () => {
 };
 
 // the following functions are placeholders until data is integrated with other services
-const getRandomListingId = () => {
-  return Math.floor(Math.random() * (30000000 - 950 + 1)) + 950;
-};
+const getRandomListingId = () => (
+  Math.floor(Math.random() * ((30000000 - 950) + 1)) + 950
+);
 
-const getRandomSearchId = () => {
-  return Math.floor(Math.random() * (400000 - 1000 + 1)) + 1000;
+const getRandomSearchId = () => (
+  Math.floor(Math.random() * ((400000 - 1000) + 1)) + 1000
+);
+
+const getRandomPricePerNight = () => {
+  const chance = getChance();
+  let price;
+
+  if (chance < 35) {
+    price = Math.ceil(Math.random() * 12) * 10;
+  } else if (chance >= 35 && chance < 80) {
+    price = Math.ceil((Math.random() * ((25 - 12) + 1)) + 12) * 10;
+  } else if (chance >= 80 && chance < 95) {
+    price = Math.ceil((Math.random() * ((50 - 25) + 1)) + 25) * 10;
+  } else {
+    price = Math.ceil((Math.random() * ((80 - 50) + 1)) + 50) * 10;
+  }
+
+  return price;
 };
 
 const formatDate = (year, month, day) => {
   const mo = (`0${month}`).slice(-2);
   const d = (`0${day}`).slice(-2);
 
-  return `${year}:${mo}:${d}`;
+  return `${year}-${mo}-${d}`;
 };
 
 /* ----- END HELPER FUNCTIONS ----- */
@@ -295,12 +315,34 @@ const populateUserHits = () => {
   return tempUserHits;
 };
 
-const getRandomBookedDates = () => {
+const getRandomBookedDatesAndPrice = () => {
   const numNights = getNumNightsBooked();
   const startDay = (Math.ceil(Math.random() * 23)).toString();
   const checkIn = formatDate('2017', CURRENT_MONTH, startDay);
   const endDay = (parseInt(startDay, 10) + numNights).toString();
   const checkOut = formatDate('2017', CURRENT_MONTH, endDay);
+  const perNightPrice = getRandomPricePerNight();
+  const totalPrice = perNightPrice * numNights;
 
-  return [checkIn, checkOut];
+  return [checkIn, checkOut, totalPrice, perNightPrice];
 };
+
+/* ----- END DATA GENERATION FUNCTIONS ----- */
+/* ----- START DATA INSERTION FUNCTIONS ----- */
+
+const populateBookingsTable = () => {
+  for (let q = 0; q < 10; q += 1) {
+    const listingId = getRandomListingId();
+    const datesAndPrice = getRandomBookedDatesAndPrice();
+    const checkIn = datesAndPrice[0];
+    const checkOut = datesAndPrice[1];
+    const totalPrice = datesAndPrice[2];
+    const avgPrice = datesAndPrice[3];
+
+    addBooking(listingId, checkIn, checkOut, totalPrice, avgPrice);
+  }
+};
+
+
+
+populateBookingsTable();

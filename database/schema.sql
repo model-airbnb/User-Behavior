@@ -3,7 +3,7 @@ CREATE TABLE user_hits (
   user_id               INT NOT NULL,
   visit_id              SERIAL UNIQUE NOT NULL,
   action_id             SERIAL UNIQUE NOT NULL REFERENCES actions(action_id),
-  search_id             INT,
+  search_id             VARCHAR(50),
   listing_id            INT,
   booking_id            SERIAL UNIQUE REFERENCES bookings(booking_id)
 );

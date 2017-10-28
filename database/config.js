@@ -13,5 +13,4 @@ const {
 } = config;
 
 module.exports.pgConnection = `postgresql://${user}:${password}@${host}:${port}/postgres`;
-module.exports.dbConnection = `postgresql://${user}:${password}@${host}:${port}/inventory`;
-module.exports.testDbConnection = `postgresql://${user}:${password}@${host}:${port}/${database}`;
+module.exports.dbConnection = `postgresql://${user}:${password}@${host}:${port}/${database}`;

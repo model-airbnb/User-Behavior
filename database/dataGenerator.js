@@ -4,6 +4,7 @@ const USER_ID_RANGE = 100000;
 const VISITS_RANGE = 30;
 const HITS_RANGE = 25;
 const CURRENT_MONTH = '10';
+const VISIT_ID = 100001;
 
 const USER_VISITS_COUNT = [0, 0, 0, 0, 0];
 // idx = 0, max 30000
@@ -269,11 +270,11 @@ const formatDate = (year, month, day) => {
 
 /* ----- END HELPER FUNCTIONS ----- */
 
-const tempUserHits = {}; // temporary object to hold user hits by userId
+const userHits = {};
 
 //  eventually I will add a condition for users to generate more search actions
 
-const populateUserHits = () => {
+const generateUserHits = () => {
   const userId = getRandomUserId();
   const visits = getVisitsAndCountUser();
   const bookings = getNumOfBookingsForUser();
@@ -331,7 +332,7 @@ const getRandomBookedDatesAndPrice = () => {
 /* ----- START DATA INSERTION FUNCTIONS ----- */
 
 const populateBookingsTable = () => {
-  for (let q = 0; q < 10; q += 1) {
+  for (let q = 0; q < 1; q += 1) {
     const listingId = getRandomListingId();
     const datesAndPrice = getRandomBookedDatesAndPrice();
     const checkIn = datesAndPrice[0];
@@ -339,10 +340,14 @@ const populateBookingsTable = () => {
     const totalPrice = datesAndPrice[2];
     const avgPrice = datesAndPrice[3];
 
-    addBooking(listingId, checkIn, checkOut, totalPrice, avgPrice);
+
+    addBooking(listingId, checkIn, checkOut, totalPrice, avgPrice, 123, 2, '19210');
   }
 };
 
+// const populateUserHitsTable = () => {
+
+// }
 
 
 populateBookingsTable();

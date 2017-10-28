@@ -228,39 +228,22 @@ const getNumNightsBooked = () => {
   }
 
   return nights;
-
-}
-
-const formatDate = (year, month, day) => {
-  const mo = (`0${month}`).slice(-2);
-  const d = (`0${day}`).slice(-2);
-
-  return `${year}:${mo}:${d}`;
 };
-
-const formatTime = (hour, minutes, seconds) => {
-  const hr = (`0${hour}`).slice(-2);
-  const min = (`0${minutes}`).slice(-2);
-  const sec = (`0${seconds}`).slice(-2);
-
-  return `${hr}:${min}:${sec}`;
-};
-
 
 /* ----- END HELPER FUNCTIONS ----- */
 
-const tempUserStream = {}; // temporary object to hold user hits by userId
+const tempUserHits = {}; // temporary object to hold user hits by userId
 
 
 //  eventually I will add a condition for users to generate more search actions
 
-const populateUserStream = () => {
+const populateUserHits = () => {
   const userId = getRandomUserId();
   const visits = getVisitsAndCountUser();
   const bookings = getNumOfBookingsForUser();
   const visitsThatBooked = getVisitsThatBooked(bookings, visits);
 
-  tempUserStream[userId] = [];
+  tempUserHits[userId] = [];
 
   for (let v = 1; v <= visits; v += 1) {
     let hitsForVisit = getRandomNumOfHits();
@@ -284,7 +267,7 @@ const populateUserStream = () => {
           hitsDetailsForVisit[hit] = 'view_listing_details'; //  last hit is a view
         }
 
-        tempUserStream[userId].push(hitsDetailsForVisit); //  end of current visit, push into array
+        tempUserHits[userId].push(hitsDetailsForVisit); //  end of current visit, push into array
         hit += 1;
       } else {
         hitsDetailsForVisit[hit] = 'view_listing_details';
@@ -293,5 +276,5 @@ const populateUserStream = () => {
     }
   }
 
-  return tempUserStream;
+  return tempUserHits;
 };

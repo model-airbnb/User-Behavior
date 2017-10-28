@@ -270,17 +270,16 @@ const formatDate = (year, month, day) => {
 
 /* ----- END HELPER FUNCTIONS ----- */
 
-const userHits = {};
-
 //  eventually I will add a condition for users to generate more search actions
-
 const generateUserHits = () => {
+  const userHits = {};
   const userId = getRandomUserId();
   const visits = getVisitsAndCountUser();
-  const bookings = getNumOfBookingsForUser();
+  const bookings = getNumOfBookingsForUser(visits);
   const visitsThatBooked = getVisitsThatBooked(bookings, visits);
 
-  tempUserHits[userId] = [];
+  userHits.USER_ID = userId;
+  userHits.USER_VISITS = [];
 
   for (let v = 1; v <= visits; v += 1) {
     let hitsForVisit = getRandomNumOfHits();
@@ -304,7 +303,7 @@ const generateUserHits = () => {
           hitsDetailsForVisit[hit] = 'view_listing_details'; //  last hit is a view
         }
 
-        tempUserHits[userId].push(hitsDetailsForVisit); //  end of current visit, push into array
+        userHits.USER_VISITS.push(hitsDetailsForVisit); //  end of current visit, push into array
         hit += 1;
       } else {
         hitsDetailsForVisit[hit] = 'view_listing_details';
@@ -313,7 +312,7 @@ const generateUserHits = () => {
     }
   }
 
-  return tempUserHits;
+  return [bookings, userHits];
 };
 
 const getRandomBookedDatesAndPrice = () => {
@@ -331,23 +330,25 @@ const getRandomBookedDatesAndPrice = () => {
 /* ----- END DATA GENERATION FUNCTIONS ----- */
 /* ----- START DATA INSERTION FUNCTIONS ----- */
 
-const populateBookingsTable = () => {
-  for (let q = 0; q < 1; q += 1) {
-    const listingId = getRandomListingId();
-    const datesAndPrice = getRandomBookedDatesAndPrice();
-    const checkIn = datesAndPrice[0];
-    const checkOut = datesAndPrice[1];
-    const totalPrice = datesAndPrice[2];
-    const avgPrice = datesAndPrice[3];
+const populateBookingsTable = (userId, visitNum, searchId) => {
+  const listingId = getRandomListingId();
+  const datesAndPrice = getRandomBookedDatesAndPrice();
+  const checkIn = datesAndPrice[0];
+  const checkOut = datesAndPrice[1];
+  const totalPrice = datesAndPrice[2];
+  const avgPrice = datesAndPrice[3];
 
 
-    addBooking(listingId, checkIn, checkOut, totalPrice, avgPrice, 123, 2, '19210');
-  }
+  addBooking(listingId, checkIn, checkOut, totalPrice, avgPrice, userId, visitNum, searchId);
 };
 
 // const populateUserHitsTable = () => {
+//   const userObj = generateUserHits();
+
+//   const userId = userObj.USER_ID;
+//   const visitDetails = userObj.USER_VISITS;
+
 
 // }
 
-
-populateBookingsTable();
+console.log(generateUserHits());

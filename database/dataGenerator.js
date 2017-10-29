@@ -1,10 +1,9 @@
-const { addBooking } = require('./index');
+const { addBooking, addUserGeneralActions } = require('./index');
 
 const USER_ID_RANGE = 100000;
 const VISITS_RANGE = 30;
 const HITS_RANGE = 25;
 const CURRENT_MONTH = '10';
-const VISIT_ID = 100001;
 
 const USER_VISITS_COUNT = [0, 0, 0, 0, 0];
 // idx = 0, max 30000
@@ -248,9 +247,9 @@ const getRandomPricePerNight = () => {
   const chance = getChance();
   let price;
 
-  if (chance < 35) {
+  if (chance < 40) {
     price = Math.ceil(Math.random() * 12) * 10;
-  } else if (chance >= 35 && chance < 80) {
+  } else if (chance >= 40 && chance < 80) {
     price = Math.ceil((Math.random() * ((25 - 12) + 1)) + 12) * 10;
   } else if (chance >= 80 && chance < 95) {
     price = Math.ceil((Math.random() * ((50 - 25) + 1)) + 25) * 10;
@@ -312,7 +311,7 @@ const generateUserHits = () => {
     }
   }
 
-  return [bookings, userHits];
+  return userHits;
 };
 
 const getRandomBookedDatesAndPrice = () => {
@@ -330,8 +329,7 @@ const getRandomBookedDatesAndPrice = () => {
 /* ----- END DATA GENERATION FUNCTIONS ----- */
 /* ----- START DATA INSERTION FUNCTIONS ----- */
 
-const populateBookingsTable = (userId, visitNum, searchId) => {
-  const listingId = getRandomListingId();
+const populateBookingsTable = (userId, visitNum, searchId, listingId) => {
   const datesAndPrice = getRandomBookedDatesAndPrice();
   const checkIn = datesAndPrice[0];
   const checkOut = datesAndPrice[1];
@@ -342,13 +340,25 @@ const populateBookingsTable = (userId, visitNum, searchId) => {
   addBooking(listingId, checkIn, checkOut, totalPrice, avgPrice, userId, visitNum, searchId);
 };
 
-// const populateUserHitsTable = () => {
-//   const userObj = generateUserHits();
+const populateUserHitsTable = () => {
+  const userObj = generateUserHits();
+  const userId = userObj.USER_ID;
+  const userVisits = userObj.USER_VISITS;
 
-//   const userId = userObj.USER_ID;
-//   const visitDetails = userObj.USER_VISITS;
+  for (let v = 0; v < userVisits.length; v += 1) {
+    const numHitsForVisit = Object.keys(userVisits[v]).length;
 
+    for (let h = 1; h <= numHitsForVisit; h += 1) {
+      const listingId = getRandomListingId();
+      if ((h === numHitsForVisit) && (userVisits[v][h] === 'book')) {
+        populateBookingsTable(userId, v + 1, 'tempSearchId', listingId);
+      } else {
+        addUserGeneralActions(userId, v + 1, userVisits[v][h], 'tempSearchId', listingId);
+      }
+    }
+  }
+};
 
-// }
-
-console.log(generateUserHits());
+for (let i = 0; i < 1000; i += 1) {
+  populateUserHitsTable();
+}

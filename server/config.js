@@ -1,6 +1,6 @@
-var elasticsearch = require('elasticsearch');
+const elasticsearch = require('elasticsearch');
 
-var esClient = new elasticsearch.Client({
+const esClient = new elasticsearch.Client({
   host: 'localhost:9200',
   log: 'trace'
 });

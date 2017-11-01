@@ -13,10 +13,3 @@ client.connect();
 
 
 module.exports.client = client;
-
-// const {
-//   host, port, user, database, password,
-// } = config;
-
-// module.exports.pgConnection = `postgresql://${user}:${password}@${host}:${port}/postgres`;
-// module.exports.dbConnection = process.env.DATABASE_URL || `postgresql://${user}:${password}@${host}:${port}/${database}`;

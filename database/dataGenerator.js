@@ -1,20 +1,15 @@
 const { addBooking, addUserGeneralActions } = require('./index');
 
-const USER_ID_RANGE = 100000;
+const USER_ID_RANGE = 505000;
 const VISITS_RANGE = 30;
 const HITS_RANGE = 25;
 const CURRENT_MONTH = '10';
 
 const USER_VISITS_COUNT = [0, 0, 0, 0, 0];
-// idx = 0, max 30000
-// idx = 1, max 50000
-// idx = 2, max 15000
-// idx = 3, max 3000
-// idx = 4, max 2000
 
 // Get a random user id so that visit values are spread randomly
 const getRandomUserId = () => (
-  Math.ceil(Math.random() * USER_ID_RANGE)
+  Math.ceil(Math.random() * ((USER_ID_RANGE - 500000) + 1)) + 500000
 );
 
 //  Get a random number of visits for a particular user
@@ -31,15 +26,15 @@ const getRandomNumOfHits = () => (
 const getVisitsAndCountUser = () => {
   const visits = getRandomNumOfVisits();
 
-  if ((visits >= 1) && (visits <= 7) && (USER_VISITS_COUNT[0] < 30000)) {
+  if ((visits >= 1) && (visits <= 7) && (USER_VISITS_COUNT[0] < 500)) {
     USER_VISITS_COUNT[0] += 1;
-  } else if ((visits >= 8) && (visits <= 13) && (USER_VISITS_COUNT[1] < 50000)) {
+  } else if ((visits >= 8) && (visits <= 13) && (USER_VISITS_COUNT[1] < 700)) {
     USER_VISITS_COUNT[1] += 1;
-  } else if ((visits >= 14) && (visits <= 19) && (USER_VISITS_COUNT[2] < 15000)) {
+  } else if ((visits >= 14) && (visits <= 19) && (USER_VISITS_COUNT[2] < 400)) {
     USER_VISITS_COUNT[2] += 1;
-  } else if ((visits >= 20) && (visits <= 25) && (USER_VISITS_COUNT[3] < 3000)) {
+  } else if ((visits >= 20) && (visits <= 25) && (USER_VISITS_COUNT[3] < 250)) {
     USER_VISITS_COUNT[3] += 1;
-  } else if ((visits >= 26) && (USER_VISITS_COUNT[4] < 2000)) {
+  } else if ((visits >= 26) && (USER_VISITS_COUNT[4] < 150)) {
     USER_VISITS_COUNT[4] += 1;
   } else {
     getVisitsAndCountUser();
@@ -246,15 +241,19 @@ const getRandomSearchId = () => (
 const getRandomPricePerNight = () => {
   const chance = getChance();
   let price;
+  const MAX_PRICE1 = 12;
+  const MAX_PRICE2 = 25;
+  const MAX_PRICE3 = 50;
+  const MAX_PRICE4 = 80;
 
   if (chance < 40) {
-    price = Math.ceil(Math.random() * 12) * 10;
+    price = Math.ceil(Math.random() * MAX_PRICE1) * 10;
   } else if (chance >= 40 && chance < 80) {
-    price = Math.ceil((Math.random() * ((25 - 12) + 1)) + 12) * 10;
+    price = Math.ceil((Math.random() * ((MAX_PRICE2 - MAX_PRICE1) + 1)) + MAX_PRICE1) * 10;
   } else if (chance >= 80 && chance < 95) {
-    price = Math.ceil((Math.random() * ((50 - 25) + 1)) + 25) * 10;
+    price = Math.ceil((Math.random() * ((MAX_PRICE3 - MAX_PRICE2) + 1)) + MAX_PRICE2) * 10;
   } else {
-    price = Math.ceil((Math.random() * ((80 - 50) + 1)) + 50) * 10;
+    price = Math.ceil((Math.random() * ((MAX_PRICE4 - MAX_PRICE3) + 1)) + MAX_PRICE3) * 10;
   }
 
   return price;
@@ -359,6 +358,6 @@ const populateUserHitsTable = () => {
   }
 };
 
-for (let i = 0; i < 1000; i += 1) {
+for (let i = 0; i < 2000; i += 1) {
   populateUserHitsTable();
 }

@@ -1,16 +1,11 @@
 CREATE TABLE user_hits (
   hit_id                SERIAL UNIQUE NOT NULL PRIMARY KEY,
   user_id               INT NOT NULL,
-  visit_id              SERIAL UNIQUE NOT NULL,
-  action_id             SERIAL UNIQUE NOT NULL REFERENCES actions(action_id),
-  search_id             INT,
+  visit_num             INT NOT NULL,
+  action_type           VARCHAR(50),
+  search_id             VARCHAR(50),
   listing_id            INT,
-  booking_id            SERIAL UNIQUE REFERENCES bookings(booking_id)
-);
-
-CREATE TABLE actions (
-  action_id             SERIAL UNIQUE NOT NULL PRIMARY KEY,
-  user_action           VARCHAR(50)
+  booking_id            INT UNIQUE REFERENCES bookings(booking_id)
 );
 
 CREATE TABLE bookings (

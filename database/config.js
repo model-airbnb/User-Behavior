@@ -8,8 +8,8 @@ const config = {
   password: process.env.PGPASSWORD || 'qdot',
 };
 
-const client = new Client(config);
-client.connect();
+const dbClient = new Client(config);
+dbClient.connect();
 
 
-module.exports.client = client;
+module.exports.dbClient = dbClient;

@@ -1,4 +1,4 @@
-const { client } = require('./config');
+const { dbClient } = require('./config');
 
 const addUserGeneralActions = (userId, visitNum, actionType, searchId, listingId) => {
   const queryString =
@@ -6,7 +6,7 @@ const addUserGeneralActions = (userId, visitNum, actionType, searchId, listingId
       (user_id, visit_num, action_type, search_id, listing_id)
       values (${userId}, ${visitNum}, '${actionType}', '${searchId}', ${listingId})`;
 
-  client.query(queryString)
+  dbClient.query(queryString)
     .then(res => console.log('successfully inserted:', res))
     .catch(err => console.error(err));
 };
@@ -20,10 +20,11 @@ const addBooking = (listingId, checkIn, checkOut, totalPrice, avgPrice, userId, 
     INSERT INTO user_hits (user_id, visit_num, action_type, search_id, listing_id, booking_id)
     values (${userId}, ${visitNum}, 'book', '${searchId}', ${listingId}, (select inserted.booking_id from inserted))`;
 
-  client.query(queryString)
+  dbClient.query(queryString)
     .then(res => console.log('successfully inserted:', res))
     .catch(err => console.error(err));
 };
 
 module.exports.addBooking = addBooking;
 module.exports.addUserGeneralActions = addUserGeneralActions;
+

@@ -1,7 +1,7 @@
 CREATE TABLE user_hits (
   hit_id                SERIAL UNIQUE NOT NULL PRIMARY KEY,
   user_id               INT NOT NULL,
-  visit_num             INT NOT NULL,
+  visit_id              INT NOT NULL,
   action_type           VARCHAR(50) NOT NULL,
   search_id             VARCHAR(50),
   listing_id            INT,

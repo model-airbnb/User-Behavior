@@ -2,8 +2,8 @@ const AWS = require('aws-sdk');
 const config = require('./config');
 
 AWS.config.update({
-  accessKeyId: 'KEY',
-  secretAccessKey: 'SECRET',
+  accessKeyId: config.accessKey,
+  secretAccessKey: config.secretKey,
 });
 
 const sqs = new AWS.SQS({ region: config.region });

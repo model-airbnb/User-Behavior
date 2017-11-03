@@ -1,7 +1,6 @@
 const { addBooking, addUserGeneralActions } = require('./index');
 
 const HITS_RANGE = [3, 15];
-let VISIT_ID = 10100;
 
 //  Get a random number of visits for a particular user
 const getRandomNumOfVisits = (MIN, MAX) => (
@@ -56,7 +55,7 @@ const isBooked = (visits) => {
 
 /* ----- END HELPER FUNCTIONS ----- */
 
-const generateUserBooking = (searchId, visitId, userId, checkIn, checkOut, listing) => {
+const generateUserBooking = (searchId, visitNum, userId, checkIn, checkOut, listing) => {
   const datesBooked = listing.nightlyPrices.map(day => (
     day.date
   ));
@@ -70,7 +69,7 @@ const generateUserBooking = (searchId, visitId, userId, checkIn, checkOut, listi
 
   const bookingDetails = {
     searchId,
-    visitId,
+    visitNum,
     userId,
     listingId: listing.listingId,
     checkIn,
@@ -97,14 +96,13 @@ const generateUserHits = (searchObj) => {
   const visitsForSearch = [];
 
   for (let v = 1; v <= visits; v += 1) {
-    VISIT_ID += 1;
     const hitsForVisit = getRandomNumOfHits();
     let hit = 1;
 
     const hitsDetailsForVisit = {
       searchId,
       userId,
-      visitId: VISIT_ID,
+      visitNum: v,
       hitsDetails: [],
     };
 
@@ -118,7 +116,7 @@ const generateUserHits = (searchObj) => {
 
       if (v === visits && hit === hitsForVisit && booked) {
         hitDetail.action = 'book';
-        generateUserBooking(searchId, VISIT_ID, userId, checkIn, checkOut, listing);
+        generateUserBooking(searchId, v, userId, checkIn, checkOut, listing);
       } else {
         hitDetail.action = 'view_listing_details';
       }

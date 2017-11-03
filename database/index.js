@@ -24,8 +24,8 @@ const addUserGeneralActions = (visitsForSearch) => {
 const addBooking = (bookingDetails) => {
   const {
     searchId,
-    visitNum,
     userId,
+    visitNum,
     listingId,
     checkIn,
     checkOut,
@@ -34,8 +34,8 @@ const addBooking = (bookingDetails) => {
   } = bookingDetails;
 
   const queryString = `with inserted as
-    INSERT INTO bookings (listing_id, check_in, check_out, total_price, avg_price_per_night)
-      values (${listingId}, '${checkIn}', '${checkOut}', '$${totalPrice}', '$${avgPrice}')
+    (INSERT INTO bookings (search_id, user_id, visit_num, listing_id, check_in, check_out, total_price, avg_price_per_night)
+      values (${searchId}, ${userId}, ${visitNum}, ${listingId}, '${checkIn}', '${checkOut}', '$${totalPrice}', '$${avgPrice}')
       returning *)
     INSERT INTO user_hits (user_id, visit_num, action_type, search_id, listing_id, booking_id)
       values (${userId}, ${visitNum}, 'book', '${searchId}', ${listingId}, (select inserted.booking_id from inserted))`;

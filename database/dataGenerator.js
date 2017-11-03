@@ -3,8 +3,8 @@ const { addBooking, addUserGeneralActions } = require('./index');
 const HITS_RANGE = [3, 15];
 
 //  Get a random number of visits for a particular user
-const getRandomNumOfVisits = (MIN, MAX) => (
-  Math.floor(Math.random() * ((MAX - MIN) + 1)) + MIN
+const getRandomNumOfVisits = (min, max) => (
+  Math.floor(Math.random() * ((max - min) + 1)) + min
 );
 
 const getVisitsForUser = () => {

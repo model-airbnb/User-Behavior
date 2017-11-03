@@ -33,9 +33,13 @@ const getChance = () => (Math.random() * 100).toFixed(2);
 const getChanceForBooked = (visits) => {
   if (visits === 1) {
     return 30;
-  } else if (visits >= 2 && visits <= 7) {
+  }
+
+  if (visits >= 2 && visits <= 7) {
     return ((21 - visits) * visits);
-  } else if (visits >= 8 && visits <= 13) {
+  }
+
+  if (visits >= 8 && visits <= 13) {
     return 98 + (((visits - 8) * 2) / 10);
   }
 

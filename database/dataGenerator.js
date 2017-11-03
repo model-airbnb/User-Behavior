@@ -60,13 +60,9 @@ const isBooked = (visits) => {
 /* ----- END HELPER FUNCTIONS ----- */
 
 const generateUserBooking = (searchId, visitNum, userId, checkIn, checkOut, listing) => {
-  const datesBooked = listing.nightlyPrices.map(day => (
-    day.date
-  ));
+  const datesBooked = listing.nightlyPrices.map(day => day.date);
 
-  const prices = listing.nightlyPrices.map(day => (
-    parseInt(day.price.slice(1), 10)
-  ));
+  const prices = listing.nightlyPrices.map(day => parseInt(day.price.slice(1), 10));
 
   const totalPrice = prices.reduce((sum, value) => sum + value, 0);
   const avgPrice = (totalPrice / prices.length).toFixed(2);

@@ -1,363 +1,136 @@
 const { addBooking, addUserGeneralActions } = require('./index');
 
-const USER_ID_RANGE = 505000;
-const VISITS_RANGE = 30;
-const HITS_RANGE = 25;
-const CURRENT_MONTH = '10';
-
-const USER_VISITS_COUNT = [0, 0, 0, 0, 0];
-
-// Get a random user id so that visit values are spread randomly
-const getRandomUserId = () => (
-  Math.ceil(Math.random() * ((USER_ID_RANGE - 500000) + 1)) + 500000
-);
+const HITS_RANGE = [3, 15];
 
 //  Get a random number of visits for a particular user
-const getRandomNumOfVisits = () => (
-  Math.ceil(Math.random() * VISITS_RANGE)
+const getRandomNumOfVisits = (min, max) => (
+  Math.floor(Math.random() * ((max - min) + 1)) + min
 );
 
-//  Get a random number of user actions for a returning visit
-const getRandomNumOfHits = () => (
-  Math.ceil(Math.random() * HITS_RANGE)
-);
+const getVisitsForUser = () => {
+  let visits;
+  const chance = Math.ceil(Math.random() * 100);
 
-//  Eventually: refactor
-const getVisitsAndCountUser = () => {
-  const visits = getRandomNumOfVisits();
-
-  if ((visits >= 1) && (visits <= 7) && (USER_VISITS_COUNT[0] < 500)) {
-    USER_VISITS_COUNT[0] += 1;
-  } else if ((visits >= 8) && (visits <= 13) && (USER_VISITS_COUNT[1] < 700)) {
-    USER_VISITS_COUNT[1] += 1;
-  } else if ((visits >= 14) && (visits <= 19) && (USER_VISITS_COUNT[2] < 400)) {
-    USER_VISITS_COUNT[2] += 1;
-  } else if ((visits >= 20) && (visits <= 25) && (USER_VISITS_COUNT[3] < 250)) {
-    USER_VISITS_COUNT[3] += 1;
-  } else if ((visits >= 26) && (USER_VISITS_COUNT[4] < 150)) {
-    USER_VISITS_COUNT[4] += 1;
+  if (chance <= 55) {
+    visits = getRandomNumOfVisits(1, 7);
+  } else if (chance > 55 && chance <= 92) {
+    visits = getRandomNumOfVisits(8, 13);
   } else {
-    getVisitsAndCountUser();
+    visits = getRandomNumOfVisits(14, 20);
   }
 
   return visits;
 };
 
-//  the next few functions are for determining number of bookings per user for number of visits
+//  Get a random number of user hits for each visit
+const getRandomNumOfHits = () => (
+  Math.floor(Math.random() * ((HITS_RANGE[1] - HITS_RANGE[0]) + 1)) + HITS_RANGE[0]
+);
+
+//  the next few functions are for determining if a user booked within their search
 const getChance = () => (Math.random() * 100).toFixed(2);
 
-const getBookingsForMaxTwo = (chance, chanceForMax, chanceForOne) => {
-  let bookings = 0;
-
-  if (chance < chanceForMax) {
-    bookings = 2;
-  } else if (chance < chanceForOne) {
-    bookings = 1;
-  }
-
-  return bookings;
-};
-
-const getBookingsOneVisit = () => {
-  const chance = getChance();
-  let bookings = 0;
-
-  if (chance < 3) {
-    bookings = 1;
-  }
-
-  return bookings;
-};
-
-const getBookingsTwoToSevenVisits = (visits) => {
-  const chance = getChance();
-  const chanceForMax = (visits / 10);
-  const chanceForOne = ((21 - visits) * visits) + chanceForMax;
-  const bookings = getBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
-
-  return bookings;
-};
-
-const getBookingsEightToThirteenVisits = (visits) => {
-  const chance = getChance();
-  const increment = visits - 7;
-  let i = 1;
-  let numerator = 8;
-  const denominator = 10;
-
-  while (i < increment) {
-    numerator += 2;
-    i += 1;
-  }
-
-  const chanceForMax = numerator / denominator;
-  const chanceForOne = 98 + chanceForMax;
-  const bookings = getBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
-
-  return bookings;
-};
-
-const getBookingsFourteenToNineteenVisits = (visits) => {
-  const chance = getChance();
-  const increment = visits - 13;
-  let i = 1;
-  let numerator = 20;
-  const denominator = 10;
-  let chanceForOne = 97.90;
-
-  while (i < increment) {
-    chanceForOne = (chanceForOne - 0.09).toFixed(2);
-    numerator += 1;
-    i += 1;
-  }
-
-  const chanceForMax = numerator / denominator;
-  chanceForOne += chanceForMax;
-  const bookings = getBookingsForMaxTwo(chance, chanceForMax, chanceForOne);
-
-  return bookings;
-};
-
-const getBookingsTwentyToTwentyFiveVisits = (visits) => {
-  const chance = getChance();
-  const increment = visits - 19;
-  let i = 1;
-  const chanceForMax = 0.11;
-  const chanceForTwo = ((29 + increment) / 10) + chanceForMax;
-  let chanceForOne = 96.85 + chanceForTwo;
-  let bookings = 0;
-
-  while (i < increment) {
-    chanceForOne = (chanceForOne - 0.1).toFixed(2);
-    i += 1;
-  }
-
-  if (chance < chanceForMax) {
-    bookings = 3;
-  } else if (chance < chanceForTwo) {
-    bookings = 2;
-  } else if (chance < chanceForOne) {
-    bookings = 1;
-  }
-
-  return bookings;
-};
-
-const getBookingsTwentySixPlusVisits = (visits) => {
-  const chance = getChance();
-  const increment = visits - 25;
-  const chanceForMax = 0.05;
-  const chanceForThree = ((30 + increment) / 100) + chanceForMax;
-  const chanceForTwo = 3 + chanceForThree;
-  const chanceForOne = 96.60 + chanceForTwo;
-  let bookings = 0;
-
-  if (chance < chanceForMax) {
-    bookings = 4;
-  } else if (chance < chanceForThree) {
-    bookings = 3;
-  } else if (chance < chanceForTwo) {
-    bookings = 2;
-  } else if (chance < chanceForOne) {
-    bookings = 1;
-  }
-
-  return bookings;
-};
-
-const getNumOfBookingsForUser = (visits) => {
-  let bookings;
-
+const getChanceForBooked = (visits) => {
   if (visits === 1) {
-    bookings = getBookingsOneVisit();
-  } else if (visits <= 7) {
-    bookings = getBookingsTwoToSevenVisits(visits);
-  } else if (visits <= 13) {
-    bookings = getBookingsEightToThirteenVisits(visits);
-  } else if (visits <= 19) {
-    bookings = getBookingsFourteenToNineteenVisits(visits);
-  } else if (visits <= 25) {
-    bookings = getBookingsTwentyToTwentyFiveVisits(visits);
-  } else {
-    bookings = getBookingsTwentySixPlusVisits(visits);
+    return 30;
   }
 
-  return bookings;
-};
-
-const firstVisitActions = {
-  1: 'search',
-  2: 'view_listing_details',
-};
-
-//  randomly determine which user visits ended in a booking action
-const getVisitsThatBooked = (bookings, visits) => {
-  const result = [];
-
-  while (result.length < bookings) {
-    const v = Math.ceil(Math.random() * visits);
-    if (!result.includes(v)) {
-      result.push(v);
-    }
+  if (visits >= 2 && visits <= 7) {
+    return ((21 - visits) * visits);
   }
 
-  return result;
+  if (visits >= 8 && visits <= 13) {
+    return 98 + (((visits - 8) * 2) / 10);
+  }
+
+  return 99 + ((visits - 13) / 10);
 };
 
-const getNumNightsBooked = () => {
+const isBooked = (visits) => {
   const chance = getChance();
-  let nights = 0;
+  const bookedChance = getChanceForBooked(visits);
 
-  if (chance < 16) {
-    nights = 1;
-  } else if (chance < 46) {
-    nights = 2;
-  } else if (chance < 73) {
-    nights = 3;
-  } else if (chance < 85) {
-    nights = 4;
-  } else if (chance < 92) {
-    nights = 5;
-  } else if (chance < 96) {
-    nights = 6;
-  } else if (chance < 99) {
-    nights = 7;
-  } else {
-    nights = 8;
+  if (chance < bookedChance) {
+    return true;
   }
 
-  return nights;
-};
-
-// the following functions are placeholders until data is integrated with other services
-const getRandomListingId = () => (
-  Math.floor(Math.random() * ((30000000 - 950) + 1)) + 950
-);
-
-const getRandomSearchId = () => (
-  Math.floor(Math.random() * ((400000 - 1000) + 1)) + 1000
-);
-
-const getRandomPricePerNight = () => {
-  const chance = getChance();
-  let price;
-  const MAX_PRICE1 = 12;
-  const MAX_PRICE2 = 25;
-  const MAX_PRICE3 = 50;
-  const MAX_PRICE4 = 80;
-
-  if (chance < 40) {
-    price = Math.ceil(Math.random() * MAX_PRICE1) * 10;
-  } else if (chance >= 40 && chance < 80) {
-    price = Math.ceil((Math.random() * ((MAX_PRICE2 - MAX_PRICE1) + 1)) + MAX_PRICE1) * 10;
-  } else if (chance >= 80 && chance < 95) {
-    price = Math.ceil((Math.random() * ((MAX_PRICE3 - MAX_PRICE2) + 1)) + MAX_PRICE2) * 10;
-  } else {
-    price = Math.ceil((Math.random() * ((MAX_PRICE4 - MAX_PRICE3) + 1)) + MAX_PRICE3) * 10;
-  }
-
-  return price;
-};
-
-const formatDate = (year, month, day) => {
-  const mo = (`0${month}`).slice(-2);
-  const d = (`0${day}`).slice(-2);
-
-  return `${year}-${mo}-${d}`;
+  return false;
 };
 
 /* ----- END HELPER FUNCTIONS ----- */
 
-//  eventually I will add a condition for users to generate more search actions
-const generateUserHits = () => {
-  const userHits = {};
-  const userId = getRandomUserId();
-  const visits = getVisitsAndCountUser();
-  const bookings = getNumOfBookingsForUser(visits);
-  const visitsThatBooked = getVisitsThatBooked(bookings, visits);
+const generateUserBooking = (searchId, visitNum, userId, checkIn, checkOut, listing) => {
+  const datesBooked = listing.nightlyPrices.map(day => day.date);
 
-  userHits.USER_ID = userId;
-  userHits.USER_VISITS = [];
+  const prices = listing.nightlyPrices.map(day => parseInt(day.price.slice(1), 10));
 
-  for (let v = 1; v <= visits; v += 1) {
-    let hitsForVisit = getRandomNumOfHits();
-    let hitsDetailsForVisit = {};
-    let hit = 1;
+  const totalPrice = prices.reduce((sum, value) => sum + value, 0);
+  const avgPrice = (totalPrice / prices.length).toFixed(2);
 
-    if (visits === 1 && hitsForVisit === 1) {
-      hitsForVisit += 2;
-    }
+  const bookingDetails = {
+    searchId,
+    visitNum,
+    userId,
+    listingId: listing.listingId,
+    checkIn,
+    checkOut,
+    datesBooked,
+    totalPrice,
+    avgPrice,
+    is_available: 0,
+  };
 
-    while (hit <= hitsForVisit) {
-      if (v === 0 && hit === 1) { //  if first visit and first hit
-        hitsDetailsForVisit = firstVisitActions;
-        hit += 2;
-      }
-
-      if (hit === hitsForVisit) { //  if last hit for visit
-        if (visitsThatBooked.includes(v)) {
-          hitsDetailsForVisit[hit] = 'book'; //  last hit is a book
-        } else {
-          hitsDetailsForVisit[hit] = 'view_listing_details'; //  last hit is a view
-        }
-
-        userHits.USER_VISITS.push(hitsDetailsForVisit); //  end of current visit, push into array
-        hit += 1;
-      } else {
-        hitsDetailsForVisit[hit] = 'view_listing_details';
-        hit += 1;
-      }
-    }
-  }
-
-  return userHits;
+  addBooking(bookingDetails); // add to PostgresQL
+  // function to send to SQS
 };
 
-const getRandomBookedDatesAndPrice = () => {
-  const numNights = getNumNightsBooked();
-  const startDay = (Math.ceil(Math.random() * 23)).toString();
-  const checkIn = formatDate('2017', CURRENT_MONTH, startDay);
-  const endDay = (parseInt(startDay, 10) + numNights).toString();
-  const checkOut = formatDate('2017', CURRENT_MONTH, endDay);
-  const perNightPrice = getRandomPricePerNight();
-  const totalPrice = perNightPrice * numNights;
+//  when a user conducts a search (get request to SQS for a search doc)
+const generateUserHits = (searchObj) => {
+  const searchId = searchObj.payload.searchEventId;
+  const { userId, checkIn, checkOut } = searchObj.payload.request;
+  const searchResults = searchObj.payload.results;
 
-  return [checkIn, checkOut, totalPrice, perNightPrice];
+  const visits = getVisitsForUser();
+  const booked = searchResults.length >= 1 ? isBooked(visits) : false;
+
+  const visitsForSearch = [];
+
+  for (let v = 1; v <= visits; v += 1) {
+    const hitsForVisit = getRandomNumOfHits();
+    let hit = 1;
+
+    const hitsDetailsForVisit = {
+      searchId,
+      userId,
+      visitNum: v,
+      hitsDetails: [],
+    };
+
+    while (hit <= hitsForVisit) {
+      const hitDetail = {
+        action: '',
+        listingId: '',
+      };
+
+      const listing = searchResults[Math.floor(Math.random() * searchResults.length)];
+
+      if (v === visits && hit === hitsForVisit && booked) {
+        hitDetail.action = 'book';
+        generateUserBooking(searchId, v, userId, checkIn, checkOut, listing);
+      } else {
+        hitDetail.action = 'view_listing_details';
+      }
+
+      hitDetail.listingId = listing.listingId;
+      hitsDetailsForVisit.hitsDetails.push(hitDetail);
+      hit += 1;
+    }
+
+    visitsForSearch.push(hitsDetailsForVisit);
+  }
+
+  addUserGeneralActions(visitsForSearch);
+  // function to add to ElasticSearch here
 };
 
 /* ----- END DATA GENERATION FUNCTIONS ----- */
-/* ----- START DATA INSERTION FUNCTIONS ----- */
-
-const populateBookingsTable = (userId, visitNum, searchId, listingId) => {
-  const datesAndPrice = getRandomBookedDatesAndPrice();
-  const checkIn = datesAndPrice[0];
-  const checkOut = datesAndPrice[1];
-  const totalPrice = datesAndPrice[2];
-  const avgPrice = datesAndPrice[3];
-
-
-  addBooking(listingId, checkIn, checkOut, totalPrice, avgPrice, userId, visitNum, searchId);
-};
-
-const populateUserHitsTable = () => {
-  const userObj = generateUserHits();
-  const userId = userObj.USER_ID;
-  const userVisits = userObj.USER_VISITS;
-
-  for (let v = 0; v < userVisits.length; v += 1) {
-    const numHitsForVisit = Object.keys(userVisits[v]).length;
-
-    for (let h = 1; h <= numHitsForVisit; h += 1) {
-      const listingId = getRandomListingId();
-      if ((h === numHitsForVisit) && (userVisits[v][h] === 'book')) {
-        populateBookingsTable(userId, v + 1, 'tempSearchId', listingId);
-      } else {
-        addUserGeneralActions(userId, v + 1, userVisits[v][h], 'tempSearchId', listingId);
-      }
-    }
-  }
-};
-
-for (let i = 0; i < 2000; i += 1) {
-  populateUserHitsTable();
-}

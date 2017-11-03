@@ -37,3 +37,4 @@ node_modules/
 bower_components/
 
 messageBus/config.js
+database/dataGeneratorBackup.js

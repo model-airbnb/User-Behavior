@@ -1,7 +1,7 @@
 CREATE TABLE user_hits (
   hit_id                SERIAL UNIQUE NOT NULL PRIMARY KEY,
   user_id               INT NOT NULL,
-  visit_num             INT NOT NULL,
+  visit_id              INT NOT NULL,
   action_type           VARCHAR(50) NOT NULL,
   search_id             VARCHAR(50),
   listing_id            INT,
@@ -10,6 +10,8 @@ CREATE TABLE user_hits (
 
 CREATE TABLE bookings (
   booking_id            SERIAL UNIQUE NOT NULL PRIMARY KEY,
+  search_id             VARCHAR(50),
+  visit_id              INT NOT NULL,
   listing_id            INT NOT NULL,
   check_in              DATE NOT NULL,
   check_out             DATE NOT NULL,

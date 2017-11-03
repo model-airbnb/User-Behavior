@@ -91,7 +91,7 @@ const generateUserHits = (searchObj) => {
   const searchResults = searchObj.payload.results;
 
   const visits = getVisitsForUser();
-  const booked = searchResults.length >= 1 ? isBooked() : false;
+  const booked = searchResults.length >= 1 ? isBooked(visits) : false;
 
   const visitsForSearch = [];
 

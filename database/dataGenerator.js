@@ -80,7 +80,7 @@ const generateUserBooking = (searchId, visitNum, userId, checkIn, checkOut, list
     is_available: 0,
   };
 
-  addBooking(bookingDetails); // add to PostgresQL
+  addBooking(bookingDetails);
   // function to send to SQS
 };
 
@@ -115,14 +115,13 @@ const generateUserHits = (searchObj) => {
       const listing = searchResults[Math.floor(Math.random() * searchResults.length)];
 
       if (v === visits && hit === hitsForVisit && booked) {
-        hitDetail.action = 'book';
         generateUserBooking(searchId, v, userId, checkIn, checkOut, listing);
       } else {
         hitDetail.action = 'view_listing_details';
+        hitDetail.listingId = listing.listingId;
+        hitsDetailsForVisit.hitsDetails.push(hitDetail);
       }
 
-      hitDetail.listingId = listing.listingId;
-      hitsDetailsForVisit.hitsDetails.push(hitDetail);
       hit += 1;
     }
 

@@ -1,5 +1,5 @@
 const { addBooking, addUserGeneralActions } = require('./index');
-const messageBus = require('../messageBus/helpers');
+const elasticSearch = require('../elasticSearch/helpers');
 
 const HITS_RANGE = [3, 15];
 
@@ -131,11 +131,12 @@ module.exports.generateUserHits = (searchObj) => {
   }
 
   addUserGeneralActions(visitsForSearch);
+  // add to ElasticSearch user_hits
 
   if (booked) {
     addBooking(bookingDetails);
+    // add to ElasticSearch user_hits and bookings index
   }
-  // function to add to ElasticSearch here
 };
 
 /* ----- END DATA GENERATION FUNCTIONS ----- */

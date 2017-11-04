@@ -1,4 +1,5 @@
 const { addBooking, addUserGeneralActions } = require('./index');
+const messageBus = require('../messageBus/helpers');
 
 const HITS_RANGE = [3, 15];
 
@@ -81,7 +82,7 @@ const generateUserBooking = (searchId, visitNum, userId, checkIn, checkOut, list
 };
 
 //  when a user conducts a search (get request to SQS for a search doc)
-const generateUserHits = (searchObj) => {
+module.exports.generateUserHits = (searchObj) => {
   const searchId = searchObj.payload.searchEventId;
   const { userId, checkIn, checkOut } = searchObj.payload.request;
   const searchResults = searchObj.payload.results;

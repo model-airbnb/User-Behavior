@@ -11,12 +11,15 @@ module.exports.createBookingMessage = (bookingDetails) => {
   } = bookingDetails;
 
   const bookingMessage = {
-    searchId,
-    userId,
-    listingId,
-    datesBooked,
-    totalPrice,
-    is_available: 0,
+    topic: 'User Behavior',
+    payload: {
+      search_id: searchId,
+      user_id: userId,
+      listings_id: listingId,
+      date: datesBooked,
+      totalPrice,
+      is_available: 0,
+    },
   };
 
   sqs.publish(bookingMessage);

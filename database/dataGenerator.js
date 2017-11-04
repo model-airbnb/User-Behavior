@@ -139,8 +139,3 @@ module.exports.generateUserHits = (searchObj) => {
 };
 
 /* ----- END DATA GENERATION FUNCTIONS ----- */
-
-/* ----- POLL FOR NEW MESSAGES FROM SQS ----- */
-
-//set interval call consume method to poll for new messages
-

@@ -26,6 +26,7 @@ module.exports.createBookingMessage = (bookingDetails) => {
 };
 
 module.exports.sendSearchInfo = () => {
+  console.log('Sending search info');
   sqs.consume()
     .then(data => (
       data.Messages.map((message) => {
@@ -43,4 +44,4 @@ module.exports.sendSearchInfo = () => {
     });
 };
 
-module.exports.sendSearchInfo();
+setInterval(module.exports.sendSearchInfo, 1000);

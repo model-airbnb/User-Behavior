@@ -1,5 +1,5 @@
 const { dbClient } = require('./config');
-const messageBus = require('../messageBus/index');
+const messageBus = require('../messageBus/helpers');
 
 const addUserGeneralActions = (visitsForSearch) => {
   const { searchId, userId } = visitsForSearch[0];
@@ -43,7 +43,7 @@ const addBooking = (bookingDetails) => {
   dbClient.query(queryString)
     .then((res) => {
       console.log('successfully inserted into bookings: ', res);
-      messageBus.publishBookingEvent();
+      messageBus.createBookingMessage(bookingDetails);
     })
     .catch(err => console.error(err));
 

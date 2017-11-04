@@ -9,7 +9,7 @@ AWS.config.update({
 const sqs = new AWS.SQS({ region: config.region });
 const { subscriber } = config;
 
-const MAX_NUMBER_OF_MESSAGES_TO_RECEIVE = 5;
+const MAX_NUMBER_OF_MESSAGES_TO_RECEIVE = 10;
 const MESSAGE_VISIBILITY_TIMEOUT = 10;
 
 

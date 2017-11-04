@@ -64,7 +64,7 @@ const generateUserBooking = (searchId, visitNum, userId, checkIn, checkOut, list
 
   const prices = listing.nightlyPrices.map(day => parseInt(day.price.slice(1), 10));
 
-  const totalPrice = prices.reduce((sum, value) => sum + value, 0);
+  const totalPrice = prices.slice(0, prices.length - 1).reduce((sum, value) => sum + value, 0);
   const avgPrice = (totalPrice / prices.length).toFixed(2);
 
   return {

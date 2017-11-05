@@ -33,8 +33,6 @@ const addUserGeneralActions = (visitsForSearch) => {
       elasticSearch.processUserHits(totalHits);
     })
     .catch(err => console.error(err));
-
-  return visitsForSearch;
 };
 
 const addBooking = (bookingDetails) => {
@@ -63,8 +61,6 @@ const addBooking = (bookingDetails) => {
       messageBus.createBookingMessage(bookingDetails);
     })
     .catch(err => console.error(err));
-
-  return bookingDetails;
 };
 
 module.exports.addBooking = addBooking;

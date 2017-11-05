@@ -11,7 +11,7 @@ const addUserGeneralActions = (visitsForSearch) => {
     const { visitNum } = visitsForSearch[i];
     const hitsValues = [];
 
-    visitsForSearch[i].hitsDetails.forEach(hit => {
+    visitsForSearch[i].hitsDetails.forEach((hit) => {
       hitsValues.push(`(${userId}, ${visitNum}, '${hit.action}', '${searchId}', ${hit.listingId})`);
       totalHits.push({
         user_id: userId,

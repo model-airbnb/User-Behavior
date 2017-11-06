@@ -1,5 +1,4 @@
 const { addBooking, addUserGeneralActions } = require('./index');
-const messageBus = require('../messageBus/helpers');
 
 const HITS_RANGE = [3, 15];
 
@@ -65,7 +64,7 @@ const generateUserBooking = (searchId, visitNum, userId, checkIn, checkOut, list
 
   const prices = listing.nightlyPrices.map(day => parseInt(day.price.slice(1), 10));
 
-  const totalPrice = prices.reduce((sum, value) => sum + value, 0);
+  const totalPrice = prices.slice(0, prices.length - 1).reduce((sum, value) => sum + value, 0);
   const avgPrice = (totalPrice / prices.length).toFixed(2);
 
   return {
@@ -135,7 +134,6 @@ module.exports.generateUserHits = (searchObj) => {
   if (booked) {
     addBooking(bookingDetails);
   }
-  // function to add to ElasticSearch here
 };
 
 /* ----- END DATA GENERATION FUNCTIONS ----- */

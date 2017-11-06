@@ -1,24 +1,38 @@
 const { dbClient } = require('./config');
 const messageBus = require('../messageBus/helpers');
+const elasticSearch = require('../elasticSearch/helpers');
 
 const addUserGeneralActions = (visitsForSearch) => {
   const { searchId, userId } = visitsForSearch[0];
   let valuesString = '';
+  const totalHits = [];
 
   for (let i = 0; i < visitsForSearch.length; i += 1) {
     const { visitNum } = visitsForSearch[i];
+    const hitsValues = [];
 
-    const hitsForVisit = visitsForSearch[i].hitsDetails.map(hit => `(${userId}, ${visitNum}, '${hit.action}', '${searchId}', ${hit.listingId})`);
-    valuesString += `,${hitsForVisit.join(',')}`;
+    visitsForSearch[i].hitsDetails.forEach((hit) => {
+      hitsValues.push(`(${userId}, ${visitNum}, '${hit.action}', '${searchId}', ${hit.listingId})`);
+      totalHits.push({
+        user_id: userId,
+        visit_num: visitNum,
+        action_type: hit.action,
+        search_id: searchId,
+        listing_id: hit.listingId,
+      });
+    });
+
+    valuesString += `,${hitsValues.join(',')}`;
   }
 
   const queryString = `INSERT INTO user_hits (user_id, visit_num, action_type, search_id, listing_id) VALUES ${valuesString.substring(1)}`;
 
   dbClient.query(queryString)
-    .then(res => console.log('successfully inserted into user_hits: ', res))
+    .then((res) => {
+      console.log('successfully inserted into user_hits: ', res);
+      elasticSearch.processUserHits(totalHits);
+    })
     .catch(err => console.error(err));
-
-  return visitsForSearch;
 };
 
 const addBooking = (bookingDetails) => {
@@ -43,11 +57,10 @@ const addBooking = (bookingDetails) => {
   dbClient.query(queryString)
     .then((res) => {
       console.log('successfully inserted into bookings: ', res);
+      elasticSearch.processUserBookings(bookingDetails);
       messageBus.createBookingMessage(bookingDetails);
     })
     .catch(err => console.error(err));
-
-  return bookingDetails;
 };
 
 module.exports.addBooking = addBooking;

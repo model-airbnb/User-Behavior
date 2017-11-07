@@ -29,7 +29,7 @@ const addUserGeneralActions = (visitsForSearch) => {
 
   dbClient.query(queryString)
     .then((res) => {
-      console.log('successfully inserted into user_hits: ', res);
+      console.log('successfully inserted user_hits into PG');
       elasticSearch.processUserHits(totalHits);
     })
     .catch(err => console.error(err));
@@ -56,7 +56,7 @@ const addBooking = (bookingDetails) => {
 
   dbClient.query(queryString)
     .then((res) => {
-      console.log('successfully inserted into bookings: ', res);
+      console.log('successfully inserted bookings into PG');
       elasticSearch.processUserBookings(bookingDetails);
       messageBus.createBookingMessage(bookingDetails);
     })

@@ -19,7 +19,13 @@ module.exports.bulkInsertDocuments = (index, docs) => {
     body.push(doc);
   });
 
-  return esClient.bulk({ body });
+  return esClient.bulk({ body })
+    .then((res) => {
+      console.log('successfully imported into ES');
+    })
+    .catch((err) => {
+      console.error('there was an error', err);
+    });
 };
 
 module.exports.insertBookingHitAndDetails = (hit, booking) => {
@@ -38,5 +44,11 @@ module.exports.insertBookingHitAndDetails = (hit, booking) => {
   };
 
   const body = [hitAction, hit, bookingAction, booking];
-  return esClient.bulk({ body });
+  return esClient.bulk({ body })
+    .then((res) => {
+      console.log('successfully imported into ES');
+    })
+    .catch((err) => {
+      console.error('there was an error', err);
+    });
 };

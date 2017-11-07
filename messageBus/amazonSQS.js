@@ -23,7 +23,7 @@ module.exports.publish = (message) => {
     if (err) {
       console.error(err);
     } else {
-      console.log('success!', data);
+      console.log('successfully published message to SQS');
     }
   });
 };

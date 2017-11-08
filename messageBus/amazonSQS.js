@@ -12,7 +12,6 @@ const { subscriber } = config;
 const MAX_NUMBER_OF_MESSAGES_TO_RECEIVE = 10;
 const MESSAGE_VISIBILITY_TIMEOUT = 10;
 
-
 module.exports.publish = (message) => {
   const sqsParams = {
     QueueUrl: subscriber,

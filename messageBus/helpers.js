@@ -1,6 +1,8 @@
 const sqs = require('./amazonSQS');
 const dataGenerator = require('../database/dataGenerator');
 
+const MAX_WORKERS = process.argv[2] || 3;
+
 module.exports.createBookingMessage = (bookingDetails) => {
   const {
     searchId,
@@ -25,7 +27,7 @@ module.exports.createBookingMessage = (bookingDetails) => {
   sqs.publish(bookingMessage);
 };
 
-module.exports.sendSearchInfo = () => {
+module.exports.fetchSearchInfo = () => {
   console.log('Sending search info');
   sqs.consume()
     .then(data => (
@@ -44,4 +46,10 @@ module.exports.sendSearchInfo = () => {
     });
 };
 
-setInterval(module.exports.sendSearchInfo, 1000);
+const sendWorkers = () => {
+  for (let i = 1; i <= MAX_WORKERS; i += 1) {
+    module.exports.fetchSearchInfo(i);
+  }
+};
+
+setInterval(sendWorkers, 6000);
